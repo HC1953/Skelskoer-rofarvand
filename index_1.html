@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Rowing Club — Hazard Chart</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B2036">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hazard Chart">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <div>
+      <p class="club-name">Rowing Club</p>
+      <p class="club-sub">Hazard &amp; Landmark Chart</p>
+    </div>
+    <div class="sync-status">
+      <span class="sync-dot" id="syncDot"></span>
+      <span id="syncLabel">Syncing…</span>
+    </div>
+  </div>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main class="map-wrap">
+  <div id="map"></div>
+  <div class="map-message hidden" id="mapMessage">Loading the chart…</div>
+  <button class="refresh-btn" id="refreshBtn" aria-label="Refresh hazard data" style="bottom: calc(70px + var(--safe-bottom));">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <polyline points="1 20 1 14 7 14"></polyline>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+    </svg>
+  </button>
+  <button class="refresh-btn" id="locateBtn" aria-label="Center on my location">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
+    </svg>
+  </button>
+  <div class="install-hint" id="installHint"></div>
+</main>
+
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<section class="sheet" id="sheet" aria-hidden="true">
+  <div class="sheet-handle"></div>
+  <span class="sheet-tag" id="sheetTag">Hazard</span>
+  <h2 class="sheet-title" id="sheetTitle">—</h2>
+  <div class="sheet-body" id="sheetBody"></div>
+  <div class="sheet-coords">
+    <span id="sheetCoords">—</span>
+    <a class="sheet-directions" id="sheetDirections" href="#" target="_blank" rel="noopener">Directions</a>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
