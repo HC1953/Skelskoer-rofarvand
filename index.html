@@ -23,8 +23,8 @@
 <header class="topbar">
   <div class="topbar-row">
     <div>
-      <p class="club-name">Skelskør Roklub</p>
-      <p class="club-sub">Rofarvand</p>
+      <p class="club-name">Rowing Club</p>
+      <p class="club-sub">Hazard &amp; Landmark Chart</p>
     </div>
     <div class="sync-status">
       <span class="sync-dot" id="syncDot"></span>
@@ -37,11 +37,17 @@
 <main class="map-wrap">
   <div id="map"></div>
   <div class="map-message hidden" id="mapMessage">Loading the chart…</div>
-  <button class="refresh-btn" id="refreshBtn" aria-label="Refresh hazard data">
+  <button class="refresh-btn" id="refreshBtn" aria-label="Refresh hazard data" style="bottom: calc(70px + var(--safe-bottom));">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="23 4 23 10 17 10"></polyline>
       <polyline points="1 20 1 14 7 14"></polyline>
       <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+    </svg>
+  </button>
+  <button class="refresh-btn" id="locateBtn" aria-label="Center on my location">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>
     </svg>
   </button>
   <div class="install-hint" id="installHint"></div>
