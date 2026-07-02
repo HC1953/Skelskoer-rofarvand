@@ -30,8 +30,24 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
 }).addTo(map);
 
-// Fallback view (roughly centered on Denmark) until real data or geolocation arrives.
+// Fallback view until real data or geolocation arrives.
 map.setView([55.4, 11.35], 12);
+let hasCenteredOnUser = false;
+let geolocationSettled = false;
+
+function centerOnUser() {
+  if (!("geolocation" in navigator)) { geolocationSettled = true; return; }
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      hasCenteredOnUser = true;
+      geolocationSettled = true;
+      map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+    },
+    () => { geolocationSettled = true; /* denied/unavailable — fitToData will handle the view */ },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
+centerOnUser();
 
 const markersLayer = L.layerGroup().addTo(map);
 let allPlacemarks = [];
@@ -129,7 +145,7 @@ function renderMarkers() {
 }
 
 function fitToData() {
-  if (!allPlacemarks.length) return;
+  if (!allPlacemarks.length || hasCenteredOnUser) return;
   const bounds = L.latLngBounds(allPlacemarks.map((p) => [p.lat, p.lng]));
   map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
 }
@@ -252,7 +268,7 @@ async function sync({ isManual = false } = {}) {
       setSyncStatus("error", `Sync failed · showing cached data`);
     } else {
       setSyncStatus("error", "Sync failed · no cached data");
-      mapMessage.innerHTML = `Couldn't load the hazard chart.<br>Check your connection and tap refresh.`;
+      mapMessage.innerHTML = `Couldn't load the hazard chart.<br>Check your connection and tap refresh.<br><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:0.7;display:block;margin-top:8px;">${(err && err.message) || "unknown error"}</span>`;
       mapMessage.classList.remove("hidden");
     }
   } finally {
@@ -278,6 +294,27 @@ function loadFromCache() {
 }
 
 refreshBtn.addEventListener("click", () => sync({ isManual: true }));
+
+const locateBtn = document.getElementById("locateBtn");
+locateBtn.addEventListener("click", () => {
+  if (!("geolocation" in navigator)) {
+    alert("Location isn't available in this browser.");
+    return;
+  }
+  locateBtn.classList.add("spinning");
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      locateBtn.classList.remove("spinning");
+      hasCenteredOnUser = true;
+      map.setView([pos.coords.latitude, pos.coords.longitude], 15);
+    },
+    () => {
+      locateBtn.classList.remove("spinning");
+      alert("Couldn't get your location. Check that location access is allowed for this site.");
+    },
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+});
 
 /* ============================================================
    INSTALL HINT (iOS has no beforeinstallprompt, so show manual steps)
